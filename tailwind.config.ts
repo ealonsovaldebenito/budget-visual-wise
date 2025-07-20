@@ -73,12 +73,22 @@ export default {
 				neutral: {
 					DEFAULT: 'hsl(var(--neutral))',
 					foreground: 'hsl(var(--neutral-foreground))'
+				},
+				recurring: {
+					DEFAULT: 'hsl(var(--recurring))',
+					foreground: 'hsl(var(--recurring-foreground))'
+				},
+				savings: {
+					DEFAULT: 'hsl(var(--savings))',
+					foreground: 'hsl(var(--savings-foreground))'
 				}
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-income': 'var(--gradient-income)',
 				'gradient-expense': 'var(--gradient-expense)',
+				'gradient-recurring': 'var(--gradient-recurring)',
+				'gradient-savings': 'var(--gradient-savings)',
 				'gradient-card': 'var(--gradient-card)'
 			},
 			boxShadow: {

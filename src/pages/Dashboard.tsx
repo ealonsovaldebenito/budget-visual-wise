@@ -4,12 +4,19 @@ import {
   TrendingDown, 
   Wallet,
   ArrowUpCircle,
-  ArrowDownCircle
+  ArrowDownCircle,
+  Calendar,
+  CreditCard,
+  Wifi,
+  Zap,
+  Home,
+  Car
 } from "lucide-react";
 import { FinanceCard } from "@/components/FinanceCard";
 import { SimpleChart } from "@/components/SimpleChart";
 import { TransactionList } from "@/components/TransactionList";
 import { SavingsGoals } from "@/components/SavingsGoals";
+import { RecurringExpenses } from "@/components/RecurringExpenses";
 
 // Datos de ejemplo - en producción vendrían del backend
 const mockTransactions = [
@@ -80,11 +87,65 @@ const mockChartData = [
   { label: "Jun", income: 4500, expense: 3300 },
 ];
 
+const mockRecurringExpenses = [
+  {
+    id: "1",
+    name: "Netflix",
+    amount: 15,
+    category: "Streaming",
+    nextPayment: "28 Ene",
+    frequency: "Mensual",
+    icon: Wifi,
+    isActive: true,
+  },
+  {
+    id: "2",
+    name: "Renta",
+    amount: 1200,
+    category: "Vivienda", 
+    nextPayment: "1 Feb",
+    frequency: "Mensual",
+    icon: Home,
+    isActive: true,
+  },
+  {
+    id: "3",
+    name: "Seguro Auto",
+    amount: 180,
+    category: "Transporte",
+    nextPayment: "15 Feb",
+    frequency: "Mensual", 
+    icon: Car,
+    isActive: true,
+  },
+  {
+    id: "4",
+    name: "Electricidad",
+    amount: 85,
+    category: "Servicios",
+    nextPayment: "20 Feb",
+    frequency: "Mensual",
+    icon: Zap,
+    isActive: true,
+  },
+  {
+    id: "5",
+    name: "Tarjeta de Crédito",
+    amount: 450,
+    category: "Deuda",
+    nextPayment: "10 Feb", 
+    frequency: "Mensual",
+    icon: CreditCard,
+    isActive: true,
+  },
+];
+
 export default function Dashboard() {
   const totalBalance = 32872.99;
   const monthlyIncome = 4300;
   const monthlyExpenses = 2800;
   const savings = 1500;
+  const monthlyRecurring = mockRecurringExpenses.reduce((sum, exp) => sum + exp.amount, 0);
 
   return (
     <div className="min-h-screen bg-background">
@@ -98,12 +159,15 @@ export default function Dashboard() {
         </div>
 
         {/* Métricas principales */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           <FinanceCard
             title="Balance Total"
             value={`$${totalBalance.toLocaleString()}`}
             subtitle="Balance actual"
             icon={DollarSign}
+            variant="default"
+            gradient={true}
+            glow={true}
             trend={{ value: 8, isPositive: true }}
           />
           <FinanceCard
@@ -112,6 +176,7 @@ export default function Dashboard() {
             subtitle="Enero 2024"
             icon={ArrowUpCircle}
             variant="income"
+            gradient={true}
             trend={{ value: 12, isPositive: true }}
           />
           <FinanceCard
@@ -120,15 +185,26 @@ export default function Dashboard() {
             subtitle="Enero 2024"
             icon={ArrowDownCircle}
             variant="expense"
+            gradient={true}
             trend={{ value: 5, isPositive: false }}
           />
           <FinanceCard
-            title="Ahorro del Mes"
-            value={`$${savings.toLocaleString()}`}
-            subtitle="Diferencia I-E"
+            title="Gastos Recurrentes"
+            value={`$${monthlyRecurring.toLocaleString()}`}
+            subtitle="Comprometido mensual"
+            icon={Calendar}
+            variant="recurring"
+            gradient={true}
+            trend={{ value: 2, isPositive: false }}
+          />
+          <FinanceCard
+            title="Ahorro Efectivo"
+            value={`$${(monthlyIncome - monthlyExpenses - monthlyRecurring).toLocaleString()}`}
+            subtitle="Disponible para ahorrar"
             icon={Wallet}
-            variant="income"
-            trend={{ value: 15, isPositive: true }}
+            variant="savings"
+            gradient={true}
+            trend={{ value: 18, isPositive: true }}
           />
         </div>
 
@@ -144,11 +220,17 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* Metas de ahorro */}
-        <SavingsGoals
-          title="Metas de Ahorro"
-          goals={mockSavingsGoals}
-        />
+        {/* Gastos recurrentes y metas de ahorro */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <RecurringExpenses
+            title="Gastos Recurrentes"
+            expenses={mockRecurringExpenses}
+          />
+          <SavingsGoals
+            title="Metas de Ahorro"
+            goals={mockSavingsGoals}
+          />
+        </div>
       </div>
     </div>
   );
